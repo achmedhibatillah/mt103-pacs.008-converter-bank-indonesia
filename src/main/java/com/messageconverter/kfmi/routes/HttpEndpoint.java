@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.messageconverter.kfmi.controllers.AppInfoController;
 import com.messageconverter.kfmi.controllers.GenerateMtMessageController;
+import com.messageconverter.kfmi.controllers.Mt2MxConverterController;
 import com.messageconverter.kfmi.controllers.ReadMtMessageController;
-import com.messageconverter.kfmi.controllers.pacs008structures.Pacs008;
 // import com.messageconverter.kfmi.controllers.Mt2MxConverterController;
 import com.messageconverter.kfmi.dto.MtMessageCreate;
 import com.messageconverter.kfmi.dto.MtMessageRead;
@@ -65,13 +65,16 @@ public class HttpEndpoint {
     
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/mt2mxconverter", produces = MediaType.APPLICATION_XML_VALUE)
-    public Pacs008 mt2MxConverter(@RequestBody MtMessageRead request) {
+    public Mt2MxConverterController mt2MxConverter(@RequestBody MtMessageRead request) {
         Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());
+        System.out.println("mtMessage = " + mtMessage);
 
+
+        System.out.println(mtMessage.get("content"));
         @SuppressWarnings("unchecked")
         Map<String, Object> content = (Map<String, Object>) mtMessage.get("content");
 
-        return new Pacs008(content);
+        return new Mt2MxConverterController(content);
     }
 
 }

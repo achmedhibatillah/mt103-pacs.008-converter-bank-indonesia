@@ -1,23 +1,41 @@
-// package com.messageconverter.kfmi.controllers.pacs008structures;
+package com.messageconverter.kfmi.controllers;
 
-// import java.util.Map;
+import java.util.Map;
 
-// import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-// import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-// @JacksonXmlRootElement(localName = "Document")
-// public class Pacs008Document {
+@JacksonXmlRootElement(localName = "Document")
+public class Mt2MxConverterController {
 
-//     @JacksonXmlProperty(localName = "GrpHdr")
-//     private Pacs008Header Header;
+    @JacksonXmlProperty(localName = "GrpHdr")
+    private GrpHdr grpHdr;
 
-//     public Pacs008Document() {}
+    public Mt2MxConverterController() {}
+    public Mt2MxConverterController(Map<String, Object> content) {
+        this.grpHdr = new GrpHdr(content);
+    }
 
-//     public Pacs008Document(Map<String, Object> content) {
-//         this.Header = new Pacs008Header(content);
-//     }
+    public GrpHdr getGrpHdr() { return grpHdr; }
+    public void setGrpHdr(GrpHdr grpHdr) { this.grpHdr = grpHdr; }
 
-//     public Pacs008Header getHeader() { return Header; }
-//     public void setHeader(Pacs008Header Header) { this.Header = Header; }
+    public static class GrpHdr {
 
-// }
+        @JacksonXmlProperty(localName = "MsgId")
+        private String msgId;
+        @JacksonXmlProperty(localName = "CreDtTm")
+        private String creDtTm;
+
+        public GrpHdr() {}
+        public GrpHdr(Map<String, Object> content) {
+            this.msgId = (String) content.get("sendersReference");
+            this.creDtTm = (String) "x";
+        }
+
+        public String getMsgId() { return msgId; }
+        public void setMsgId(String msgId) { this.msgId = msgId; }
+        public String getCreDtTm() { return creDtTm; }
+        public void setCreDtTm(String creDtTm) { this.creDtTm = creDtTm; }
+    }
+}
+
