@@ -124,13 +124,27 @@ public class Mt2MxConverterController {
             private String chrgBr;
             @JacksonXmlProperty(localName = "Dbtr")
             private Dbtr dbtr;
+            @JacksonXmlProperty(localName = "DbtrAcct")
+            private DbtrAcct dbtrAcct;
+            @JacksonXmlProperty(localName = "Cdtr")
+            private Cdtr cdtr;
+            @JacksonXmlProperty(localName = "CdtrAcct")
+            private CdtrAcct cdtrAcct;
+            @JacksonXmlProperty(localName = "RmtInf")
+            private String rmtInf;
 
             public CdtTrfTx() {}
             public CdtTrfTx(Map<String, Object> content) {
                 this.pmtId = new PmtId(content);
-                this.intrBkSttlmAmt = new IntrBkSttlmAmt((String) content.get("settletAmount"), (String) content.get("settledCurrency"));
+                this.intrBkSttlmAmt = new IntrBkSttlmAmt((String) content.get("settledAmount"), (String) content.get("settledCurrency"));
                 this.chrgBr = (String) content.get("charges");
                 this.dbtr = new Dbtr(content);
+                String dbtrIban = (String) content.get("orderingCustomer");
+                this.dbtrAcct = new DbtrAcct(GetDataFrom50.extractAccount(dbtrIban));
+                this.cdtr = new Cdtr(content);
+                String cdtrIban = (String) content.get("beneficiary");
+                this.cdtrAcct = new CdtrAcct(GetDataFrom50.extractAccount(cdtrIban));
+                if (content.containsKey("remittanceInformation")) this.rmtInf = (String) content.get("remittanceInformation");
             }
 
             public PmtId getPmtId() { return this.pmtId; }
@@ -139,6 +153,14 @@ public class Mt2MxConverterController {
             public void setIntrBkSttlmAmt(IntrBkSttlmAmt intrBkSttlmAmt) { this.intrBkSttlmAmt = intrBkSttlmAmt; }
             public Dbtr getDbtr() { return this.dbtr; }
             public void setDbtr(Dbtr dbtr) { this.dbtr = dbtr; }
+            public DbtrAcct getDbtrAcct() { return this.dbtrAcct; }
+            public void sertDbtrAcct(DbtrAcct dbtrAcct) { this.dbtrAcct = dbtrAcct; }
+            public Cdtr getCdtr() { return this.cdtr; }
+            public void setCdtr(Cdtr cdtr) { this.cdtr = cdtr; }
+            public CdtrAcct getCdtrAcct() { return this.cdtrAcct; }
+            public void sertCdtrAcct(CdtrAcct cdtrAcct) { this.cdtrAcct = cdtrAcct; }
+            public String getRmtInf() { return this.rmtInf; }
+            public void setRmtInf(String rmtInf) { this.rmtInf = rmtInf; }
 
             public static class PmtId {
                 @JacksonXmlProperty(localName = "InstrId")
@@ -186,7 +208,6 @@ public class Mt2MxConverterController {
                 public void setValue(String value) { this.value = value; }
             }
         
-            // Masih harus diperbaiki!!!!!!
             public static class Dbtr {
                 @JacksonXmlProperty(localName = "Nm")
                 private String nm;
@@ -208,7 +229,6 @@ public class Mt2MxConverterController {
                 public Id getId() { return this.id; }
                 public void setId(Id id) { this.id = id; }
 
-                // dwjcdekjdskjdckjldskh
                 public static class Id {
                     @JacksonXmlProperty(localName = "OrgId")
                     private OrgId orgId;
@@ -222,7 +242,7 @@ public class Mt2MxConverterController {
                     public void setOrgId(OrgId orgId) { this.orgId = orgId; }
     
                     public static class OrgId {
-                        @JacksonXmlProperty(localName = "Lei")
+                        @JacksonXmlProperty(localName = "LEI")
                         private String lei;
     
                         public OrgId() {}
@@ -230,11 +250,112 @@ public class Mt2MxConverterController {
                             this.lei = lei;
                         }
     
-                        public String setLei() { return this.lei; }
-                        public void getLei(String lei) { this.lei = lei; }
+                        public String setLEI() { return this.lei; }
+                        public void getLEI(String lei) { this.lei = lei; }
                     }
                 }
             }
+        
+            public static class DbtrAcct {
+                @JacksonXmlProperty(localName = "Id")
+                private Id id;
+
+                public DbtrAcct() {}
+                public DbtrAcct(String iban) {
+                    this.id = new Id(iban);
+                }
+
+                public Id getId() { return this.id; }
+                public void setId(Id id) { this.id = id; }
+
+                public static class Id {
+                    @JacksonXmlProperty(localName = "Iban")
+                    private String iban;
+
+                    public Id() {}
+                    public Id(String iban) {
+                        this.iban = iban;
+                    }
+
+                    public String getIban() { return this.iban; }
+                    public void setIban(String iban) { this.iban = iban; }
+                }
+            }
+       
+            public static class Cdtr {
+                @JacksonXmlProperty(localName = "Nm")
+                private String nm;
+                @JacksonXmlProperty(localName = "Id")
+                private Id id;
+
+                public Cdtr() {}
+                public Cdtr(Map<String, Object> content) {
+                    String beneficiary = (String) content.get("beneficiary");
+                    this.nm = GetDataFrom50.extractName(beneficiary);
+
+                    if (((String) content.get("beneficiaryType")).equals("50F")) {
+                        this.id = new Id(GetDataFrom50.extractLastLine((String) content.get("beneficiary")));
+                    }
+                }
+
+                public String getNm() { return this.nm; } 
+                public void setNm(String nm) { this.nm = nm; }
+                public Id getId() { return this.id; }
+                public void setId(Id id) { this.id = id; }
+
+                public static class Id {
+                    @JacksonXmlProperty(localName = "OrgId")
+                    private OrgId orgId;
+    
+                    public Id() {}
+                    public Id(String OrgId) {
+                        this.orgId = new OrgId(OrgId);
+                    }
+    
+                    public OrgId getOrgId() { return this.orgId; }
+                    public void setOrgId(OrgId orgId) { this.orgId = orgId; }
+    
+                    public static class OrgId {
+                        @JacksonXmlProperty(localName = "LEI")
+                        private String lei;
+    
+                        public OrgId() {}
+                        public OrgId(String lei) {
+                            this.lei = lei;
+                        }
+    
+                        public String setLEI() { return this.lei; }
+                        public void getLEI(String lei) { this.lei = lei; }
+                    }
+                }
+            }
+        
+            public static class CdtrAcct {
+                @JacksonXmlProperty(localName = "Id")
+                private Id id;
+
+                public CdtrAcct() {}
+                public CdtrAcct(String iban) {
+                    this.id = new Id(iban);
+                }
+
+                public Id getId() { return this.id; }
+                public void setId(Id id) { this.id = id; }
+
+                public static class Id {
+                    @JacksonXmlProperty(localName = "Iban")
+                    private String iban;
+
+                    public Id() {}
+                    public Id(String iban) {
+                        this.iban = iban;
+                    }
+
+                    public String getIban() { return this.iban; }
+                    public void setIban(String iban) { this.iban = iban; }
+                }
+            }
+       
         }
     
     }
