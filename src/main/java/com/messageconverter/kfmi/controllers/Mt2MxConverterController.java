@@ -1,20 +1,23 @@
-package com.messageconverter.kfmi.controllers;
+// package com.messageconverter.kfmi.controllers.pacs008structures;
 
-import org.springframework.stereotype.Component;
+// import java.util.Map;
 
-@Component
-public class Mt2MxConverterController {
-    
-    public String convertMessage(String message) {
+// import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+// import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-        if ("hello".equalsIgnoreCase(message)) {
-            return "hello, kami senang!";
-        } else if ("hai".equalsIgnoreCase(message)) {
-            return "hai, ada yang bisa kami bantu?";
-        } else {
-            return "kosong!";
-        }
+// @JacksonXmlRootElement(localName = "Document")
+// public class Pacs008Document {
 
-    }
+//     @JacksonXmlProperty(localName = "GrpHdr")
+//     private Pacs008Header Header;
 
-}
+//     public Pacs008Document() {}
+
+//     public Pacs008Document(Map<String, Object> content) {
+//         this.Header = new Pacs008Header(content);
+//     }
+
+//     public Pacs008Header getHeader() { return Header; }
+//     public void setHeader(Pacs008Header Header) { this.Header = Header; }
+
+// }
