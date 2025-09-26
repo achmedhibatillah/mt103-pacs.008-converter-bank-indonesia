@@ -1,4 +1,4 @@
-package com.messageconverter.services;
+package com.messageconverter.kfmi.services;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;

@@ -45,9 +45,7 @@ public class ReadMtMessageController {
             String applicationHeaderBlock = applicationHeaderBlockMatcher.group(1);
             String applicationHeaderIO = applicationHeaderBlock.substring(0, 1);
 
-            String applicationHeaderMessageType = applicationHeaderBlock.substring(1, 4);
-
-
+            // String applicationHeaderMessageType = applicationHeaderBlock.substring(1, 4);
 
             if (applicationHeaderIO.equals("I")) {
                 switch (applicationHeaderBlock.length()) {
@@ -64,18 +62,18 @@ public class ReadMtMessageController {
                         break;
                 }
             } else if (applicationHeaderIO.equals("O")) {
-                // Format O: O<MT><Input Time><MIR Date><MIR LT><MIR Session><MIR Seq><Output Date><Output Time><Priority>
                 try {
-                    Integer applicationHeaderInputTime = Integer.parseInt(applicationHeaderBlock.substring(4, 8));
-                    Integer applicationHeaderMirDate = Integer.parseInt(applicationHeaderBlock.substring(8, 14));
+                    Integer.parseInt(applicationHeaderBlock.substring(4, 8));
+                    Integer.parseInt(applicationHeaderBlock.substring(8, 14));
 
                     String bicReceiverWithLt = applicationHeaderBlock.substring(14, 26);
                     String bicReceiver = getBic(bicReceiverWithLt);
 
-                    Integer applicationHeaderMirSession  = Integer.parseInt(applicationHeaderBlock.substring(26, 30));
-                    Integer applicationHeaderMirSequence = Integer.parseInt(applicationHeaderBlock.substring(30, 36));
-                    Integer applicationHeaderOutputDate  = Integer.parseInt(applicationHeaderBlock.substring(36, 42));
-                    Integer applicationHeaderOutputTime  = Integer.parseInt(applicationHeaderBlock.substring(42, 46));
+                    Integer.parseInt(applicationHeaderBlock.substring(26, 30));
+                    Integer.parseInt(applicationHeaderBlock.substring(30, 36));
+                    Integer.parseInt(applicationHeaderBlock.substring(36, 42));
+                    Integer.parseInt(applicationHeaderBlock.substring(42, 46));
+                    
                     String priority    = applicationHeaderBlock.substring(46, 47);
 
                     content.put("bicReceiver", bicReceiver);
@@ -163,7 +161,7 @@ public class ReadMtMessageController {
                 // Settled Date
                 try {
                     String settledDate = valueDateCurrencyInterbankSettledAmount.substring(0, 6);
-                    Integer checkSettledDate = Integer.parseInt(settledDate);
+                    Integer.parseInt(settledDate);
                     content.put("settledDate", settledDate);
                 } catch (Exception e) {
                     invalid.put("32A", "Invalid settled date.");
@@ -182,7 +180,7 @@ public class ReadMtMessageController {
                 try {
                     String settledAmount = valueDateCurrencyInterbankSettledAmount.substring(9);
                     String settledAmountStr = settledAmount.replace(",", ".");
-                    BigDecimal settledAmountValid = new BigDecimal(settledAmountStr);
+                    new BigDecimal(settledAmountStr);
                     content.put("settledAmount", settledAmount);
                 } catch (Exception e) {
                     invalid.put("32A", "Invalid settled amount.");
@@ -210,7 +208,7 @@ public class ReadMtMessageController {
                 try {
                     String instructedAmount = currencyInstructedAmount.substring(3);
                     String instructedAmountStr = instructedAmount.replace(",", ".");
-                    BigDecimal instructedAmountValid = new BigDecimal(instructedAmountStr);
+                    new BigDecimal(instructedAmountStr);
                     
                     content.put("instructedAmount", instructedAmount);
                 } catch (Exception e) {
