@@ -14,6 +14,7 @@ import com.messageconverter.kfmi.dto.MtMessageRead;
 import java.util.Map;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,18 +64,39 @@ public class HttpEndpoint {
     //     return new Pacs008Document(content);
     // }
     
-    @SuppressWarnings("unchecked")
-    @PostMapping(value = "/mt2mxconverter", produces = MediaType.APPLICATION_XML_VALUE)
-    public Mt2MxConverterController mt2MxConverter(@RequestBody MtMessageRead request) {
+    // @SuppressWarnings("unchecked")
+    // @PostMapping(value = "/mt2mxconverter", produces = MediaType.APPLICATION_XML_VALUE)
+    // public Mt2MxConverterController, Map<String, Object> mt2MxConverter(@RequestBody MtMessageRead request) {
+    //     Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());
+
+    //     if (mtMessage.get("status").equals("invalid")) {
+    //         return mtMessage;
+    //     }
+
+    //     @SuppressWarnings("unchecked")
+    //     Map<String, Object> content = (Map<String, Object>) mtMessage.get("content");
+
+    //     return new Mt2MxConverterController(content);
+    // }
+
+    @PostMapping(value = "/mt2mxconverter", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> mt2MxConverter(@RequestBody MtMessageRead request) {
         Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());
-        System.out.println("mtMessage = " + mtMessage);
-
-
-        System.out.println(mtMessage.get("content"));
+    
+        if ("invalid".equals(mtMessage.get("status"))) {
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(mtMessage);
+        }
+    
         @SuppressWarnings("unchecked")
         Map<String, Object> content = (Map<String, Object>) mtMessage.get("content");
-
-        return new Mt2MxConverterController(content);
-    }
+    
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_XML)
+                .body(new Mt2MxConverterController(content));
+    }    
 
 }
