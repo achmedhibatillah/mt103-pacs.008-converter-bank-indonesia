@@ -8,9 +8,6 @@ Thanks!
 
 
 Achmed Hibatillah
-
 Kelompok Implementasi Pengembangan Sistem Financial Market Infrastructure
-
 Departemen Penyelenggaraan Sistem Pembayaran
-
 Kantor Pusat Bank Indonesia
