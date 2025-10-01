@@ -2,12 +2,10 @@ package com.messageconverter.kfmi.services;
 
 public record GetDataFrom50() {
     public static String extractAccount(String block) {
-        // cari posisi \n pertama
         int idx = block.indexOf("\n");
 
         String blockParsed;
         if (idx != -1) {
-            // ambil semua sebelum \n
             blockParsed = block.substring(0, idx);
         } else {
             // kalau tidak ada \n

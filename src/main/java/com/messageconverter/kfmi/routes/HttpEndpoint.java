@@ -56,29 +56,6 @@ public class HttpEndpoint {
     public Map<String, Object> generateMtMessage(@RequestBody MtMessageCreate request) {
         return generateMtMessageController.generateMessage(request.getRequest());
     }
-
-    // @PostMapping(value = "/mt2mxconverter", produces = MediaType.APPLICATION_XML_VALUE)
-    // public Pacs008Document mt2MxConverter(@RequestBody MtMessageRead request) {
-    //     Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());
-    //     Map<String, Object> content = (Map<String, Object>) mtMessage.get("content");
-    //     return new Pacs008Document(content);
-    // }
-    
-    // @SuppressWarnings("unchecked")
-    // @PostMapping(value = "/mt2mxconverter", produces = MediaType.APPLICATION_XML_VALUE)
-    // public Mt2MxConverterController, Map<String, Object> mt2MxConverter(@RequestBody MtMessageRead request) {
-    //     Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());
-
-    //     if (mtMessage.get("status").equals("invalid")) {
-    //         return mtMessage;
-    //     }
-
-    //     @SuppressWarnings("unchecked")
-    //     Map<String, Object> content = (Map<String, Object>) mtMessage.get("content");
-
-    //     return new Mt2MxConverterController(content);
-    // }
-
     @PostMapping(value = "/mt2mxconverter", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> mt2MxConverter(@RequestBody MtMessageRead request) {
         Map<String, Object> mtMessage = readMtMessageController.readMessage(request.getMtMessage());

@@ -6,7 +6,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 
 public class CcyCheckerService {
-
     public static boolean isValid(String ccy) {
         try {
             InputStream xmlStream = CcyCheckerService.class.getResourceAsStream("/static/iso/iso4217.xml");
@@ -27,9 +26,9 @@ public class CcyCheckerService {
                     Element element = (Element) node;
     
                     Node ccyNode = element.getElementsByTagName("Ccy").item(0);
-                    if (ccyNode == null) continue; // skip kalau gak ada <Ccy>
+                    if (ccyNode == null) continue; 
     
-                    String xmlCcy = ccyNode.getTextContent().trim(); // <<< penting: trim()
+                    String xmlCcy = ccyNode.getTextContent().trim();
                     if (ccy.equalsIgnoreCase(xmlCcy)) {
                         return true;
                     }
